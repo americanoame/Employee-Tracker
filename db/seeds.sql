@@ -33,5 +33,3 @@ VALUES ("John", "Doe", 1, NULL),
 
 
 
--- Make your seeded data
--- Manually create your data

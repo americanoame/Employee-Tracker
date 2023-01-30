@@ -1,4 +1,3 @@
-// index: this is the first file that your computer will look at
 //This is the connection to the database
 const connection = require('./connection');
 
