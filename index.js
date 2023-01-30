@@ -152,6 +152,8 @@ function addRole() {
 
 function addNewEmployee() {
     // you need to do find all roles function and then you also need the user to select their manager
+
+    
     inquirer
         .prompt([
             {

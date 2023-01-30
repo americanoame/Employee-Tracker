@@ -17,5 +17,7 @@ const connection = mysql.createConnection(
     console.log(`Connected to the tr_db database.`)
 );
 
+
+
 //Exporting the variable db to use in other files (Modularizing)
 module.exports = connection;

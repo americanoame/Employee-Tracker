@@ -1,13 +1,6 @@
-const express = require('express');
 const path = require('path');
-const inqirer = require('inquirer');
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+const inquirer = require('inquirer');
+const mysql = require('mysql2')
 
 // Connect to database
 const db = mysql.createConnection(
@@ -19,19 +12,18 @@ const db = mysql.createConnection(
     password: 'Password123?',
     database: 'tr_db'
   },
-  console.log(`Connected to the classlist_db database.`)
+  console.log(`Connected to the tr_db database.`)
 );
 
 // Query database
-db.query('SELECT * FROM students', function (err, results) {
+db.query('SELECT * FROM employee', function (err, results) {
   console.log(results);
 });
 
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
+// user is prompted with the available functionalities (view all employees, update employee, etc)
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// user selects one of them
+
+// user completes that functionality
+
+// repeat loop
