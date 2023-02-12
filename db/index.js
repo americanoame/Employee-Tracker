@@ -53,8 +53,8 @@ class DB {
 
     createEmployee(employee) {
         return this.connection.promise().query(`
-        INSERT INTO 
-        `, );
+        INSERT INTO employee SET ?;
+        `, employee );
     }
 
 };

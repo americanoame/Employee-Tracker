@@ -3,12 +3,7 @@ const { findAllDepartments } = require("./db");
 const db = require('./db');  //Because this folder has an index.js, this require automatically refers to the index.js file
 require("console.table");
 
-initApp();
 
-// Display logo text, load main prompts
-function initApp() {
-    mainMenu();
-}
 
 // Make a menu using inquirer prompts, and when the user selects something, it should run our DB functions
 function mainMenu() {
@@ -18,7 +13,7 @@ function mainMenu() {
                 type: "list",
                 message: "Make a Selection.",
                 name: "selection",
-                choices: ["View All Employees", "AddEmployee", "UpdateEmployee", "View Departments", "Add Department", "Find all Roles", "Add Role", "Quit application"]
+                choices: ["View All Employees", "Add Employee", "Update Employee", "View Departments", "Add Department", "Find all Roles", "Add Role", "Quit application"]
             }
         ])
 
@@ -107,75 +102,83 @@ function addDepartment() {
 
 function addRole() {
     // before you run the prompt to create role, you need to get the department names and ids
-    db.findAllDepartments().then(([rows]) => {
-        // we find all departments, then we run a loop to convert the variable departmentsArr into an array
-        // EXAMPLE: departmentsArr = [
-        //     {
-        //         name: 
-        //         value:
-        //     }
-        // ]
-        let departments = rows;
-        // do like this for department and roles
-        var departmentsArr = departments.map(({ id, department }) => ({
-            name: department,
-            value: id
-        }));
+    db.findAllDepartments()
+        .then(([rows]) => {
+            // we find all departments, then we run a loop to convert the variable departmentsArr into an array
+            // EXAMPLE: departmentsArr = [
+            //     {
+            //         name: 
+            //         value:
+            //     }
+            // ]
+            let departments = rows;
+            // do like this for department and roles
+            var departmentsArr = departments.map(({ id, department }) => ({
+                name: department,
+                value: id
+            }));
 
-        inquirer
-            .prompt([
-                {
-                    type: "input",
-                    name: "title",
-                    message: "Which role  would you like?"
-                },
-                {
-                    type: "input",
-                    name: "salary",
-                    message: "What is the role's salary"
-                },
-                {
-                    type: "list",
-                    name: "department_id",
-                    message: "What department the role belongs to",
-                    choices: departmentsArr
-                }
-            ])
-            .then(res => {
-                let role = res;
-                db.createRole(role)
-                    .then(() => console.log(`Added ${role.title} to the database`))
-                    .then(() => mainMenu());
-            })
-    })
+            inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        name: "title",
+                        message: "Which role  would you like?"
+                    },
+                    {
+                        type: "input",
+                        name: "salary",
+                        message: "What is the role's salary"
+                    },
+                    {
+                        type: "list",
+                        name: "department_id",
+                        message: "What department the role belongs to",
+                        choices: departmentsArr
+                    }
+                ])
+                .then(res => {
+                    let role = res;
+                    db.createRole(role)
+                        .then(() => console.log(`Added ${role.title} to the database`))
+                        .then(() => mainMenu());
+                })
+        })
 };
 
-function addNewEmployee() {
-    // you need to do find all roles function and then you also need the user to select their manager
+function addNewEmployee() {           // you need to do find all roles function and then you also need the user to select their manager                                
+    db.findAllRoles()                 // i need to map through the roles 
+        .then(([rows]) => {
 
-    
-    inquirer
-        .prompt([
-            {
-                type: "input",
-                name: "firstName",
-                message: "Whats is the employess's firstName?"
-            },
-            {
-                type: "input",
-                name: "lastName",
-                message: "Whats is the employess's lastName?"
-            }
+            let roles = rows;
+            var rolesArr = roles.map(({ id, employee }) => ({
+                name: employee,
+                value: id
+            }));
 
+            inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        name: "first_name",
+                        message: "Whats is the employess's firstName?"
+                    },
+                    {
+                        type: "input",
+                        name: "last_name",
+                        message: "Whats is the employess's lastName?"
+                    }
+                ])
                 .then(res => {
                     let name = res;
-                    db.createRole(name)
+                    db.createEmployee(name)
                         .then(() => console.log(`Added ${name.name} to the database`))
                         .then(() => mainMenu());
                 })
-
-        ])
+        })
 }
+
+
 
 function updateEmployeeRole() {
     inquirer
@@ -203,6 +206,13 @@ function updateEmployeeRole() {
 }
 
 
+
+// Display logo text, load main prompts
+function initApp() {
+    mainMenu();
+}
+
+initApp();
 
 
 
