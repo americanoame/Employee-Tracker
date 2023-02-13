@@ -201,12 +201,16 @@ function updateEmployeeRole() {
                 type: "list",
                 name: "employeeRole",
                 message: "Which role would you like to chose to update the employee's role",
+                
             
             }
 
         ])
 
         .then((res) => {
+         
+            console.log("res:", res.employeeRole)
+            
             let firstName = res.first_name;
             let lastName = res.last_name;
             db.findAllEmployees()
@@ -222,7 +226,7 @@ function updateEmployeeRole() {
                             type: "list",
                             name: "roleId",
                             message: "which employee's role do you wanna update",
-                            choices: newRole,
+                            // choices: ["employeeRole", "employeeRole"]
 
                         })
                         .then((res) => {
