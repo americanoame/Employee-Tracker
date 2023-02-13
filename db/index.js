@@ -47,25 +47,27 @@ class DB {
         `, role);
     }
 
-
     //createEmployee: INSERT INTO: first_name. last_name, role_id, manager_id
     //updateEmployee: 
 
-    createEmployee(employee) {
-        return this.connection.promise().query(`
-        INSERT INTO employee SET ?;
-        `, employee );
+    createEmployee(firstName, lastName, roleId, managerId) {
+        let role_id = roleId;
+        
+        let manager_id = managerId
+        const parameter = [firstName, lastName, role_id, manager_id]
+        const sql = `
+        INSERT INTO employee 
+        (first_name, last_name, role_id, manager_id)
+        VALUES (?,?,?,?);
+        `
+        return this.connection.promise().query(sql, parameter);
     }
 
-    updateEmployee() {
+    updateEmployee(role) {
         return this.connection.promise().query(`
-        SELECT e.id, e.first_name, e.last_name, r.title, d.tr_name AS department, r.salary, CONCAT(m.first_name, ' ' , m.last_name) AS manager 
-        FROM employee e 
-        LEFT JOIN role r ON r.id = e.role_id 
-        `);
+            INSERT INTO role SET ?;
+         `, role );
     }
-
-
 };
 
 // new instance of our DB class, passing the database connection as a parameter

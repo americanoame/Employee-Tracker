@@ -146,97 +146,111 @@ function addRole() {
         })
 };
 
-function addNewEmployee() {           // you need to do find all roles function and then you also need the user to select their manager                                
+async function addNewEmployee() {           // you need to do find all roles function and then you also need the user to select their manager                                
 
-    inquirer
+    const res = await inquirer
         .prompt([
             {
                 type: "input",
                 name: "first_name",
-                message: "Whats is the employess's firstName?"
+                message: "Whats is the employess's first name?"
             },
             {
                 type: "input",
                 name: "last_name",
-                message: "Whats is the employess's lastName?"
+                message: "Whats is the employess's last name?"
             },
         ])
+    let firstName = res.first_name;
+    let lastName = res.last_name;
+    const [rows] = await db.findAllRoles()
+    let roles = rows;
+    var rolesArr = roles.map(({ id, title }) => ({
+        name: title,
+        value: id,
+    }));
 
-        .then((res) => {
-            let firstName = res.first_name;
-            let lastName = res.last_name;
-            db.findAllRoles()
-                .then(([rows]) => {
-                    let roles = rows;
-                    var rolesArr = roles.map(({ id, title }) => ({
-                        name: title,
-                        value: id,
-                    }));
-
-                    inquirer
-                        .prompt({
-                            type: "list",
-                            name: "roleId",
-                            message: "what is the employee's role",
-                            choices: rolesArr,
-                        })
-                        .then((res) => {
-                            let roleId = res.roleId;
-                        });
-                });
-        });
-
-}
-
-function updateEmployee() {
-    inquirer
+    const { roleId } = await inquirer
         .prompt([
             {
                 type: "list",
-                name: "emplayeeName",
-                message: " Which type of employee's role would you like to update",
-                
+                name: "roleId",
+                message: "what is the employee's role",
+                choices: rolesArr,
             },
-            {
-                type: "list",
-                name: "employee",
-                message: "Which role would you like to chose to update the employee's role",
-                choices: employee.map(employee => {
-                    return `${employee.first_name} ${employee.last_name}`
-                })
-                
-            
-            }
-
         ])
-
-        .then((res) => {
-        
-            db.findAllRoles()
-                .then(([rows]) => {
-                    let roles = rows;
-                      console.table(roles);
-                    
-                    inquirer
-                        .prompt({
-                            type: "list",
-                            name: "employee",
-                            message: "which employee's role do you wanna update",
-                            choices: roles.map(role => {
-                                return `${role.title}`
-                            })
-                        })
-                        .then((res) => {
-                            let roleId = res.roleId;
-                        });
-                });
-        });
+    console.log(roleId)
+    const manager_id = 2;  //TO DO GET ALL MANAGERS AND ORGANIZE LIKE ROLES ABOVE TO ASK QUESTION. FOR NOW WE DEFAULT ALL MANAGERS TO ID 2
+    const success = await db.createEmployee(firstName, lastName, roleId, manager_id);
+    mainMenu();
 
 }
 
 
 
 
+
+async function updateEmployee() {
+
+
+    db.findAllEmployees()
+        .then((employee) => {
+
+            var employeeList = employee[0].map(employee => {
+                console.log(employee);
+                return `${employee.first_name} ${employee.last_name}`
+            })
+
+            console.log(employeeList);
+
+            inquirer
+                .prompt([
+
+                    {
+                        type: "list",
+                        name: "employee",
+                        message: "which employee would you like to update",
+                        choices: employeeList,
+
+                    }
+
+                ])
+
+                .then((res) => {
+                    chosenEmployee = res;
+
+                    db.findAllRoles()
+                        .then(([rows]) => {
+                            let roles = rows;
+                            console.table(roles);
+
+                            inquirer
+                                .prompt({
+                                    type: "list",
+                                    name: "employee",
+                                    message: "which employee's role do you wanna update",
+                                    choices: roles.map(role => {
+                                        return `${role.title}`
+                                    })
+                                })
+                                .then((res) => {
+
+
+                                    console.log(chosenEmployee, res);
+                                    db.updateEmployee(chosenEmployee, res);
+                                });
+                        });
+                });
+        })
+
+}
+
+// .then(res => {
+//     let role = res;
+//     db.createRole(role)
+//         .then(() => console.log(`Added ${role.title} to the database`))
+//         .then(() => mainMenu());
+// })
 
 
 
@@ -246,6 +260,12 @@ function initApp() {
 }
 
 initApp();
+
+
+function quit() {
+    console.log("\nGoodbye!");
+    process.exit(0);
+}
 
 
 
