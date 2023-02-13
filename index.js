@@ -29,7 +29,7 @@ function mainMenu() {
                     break;
 
                 case "Update Employee":
-                    updateEmployeeRole();
+                    updateEmployee();
                     break;
 
                 case "View Departments":
@@ -188,7 +188,7 @@ function addNewEmployee() {           // you need to do find all roles function 
 
 }
 
-function updateEmployeeRole() {
+function updateEmployee() {
     inquirer
         .prompt([
             {
@@ -199,8 +199,11 @@ function updateEmployeeRole() {
             },
             {
                 type: "list",
-                name: "employeeRole",
+                name: "employee",
                 message: "Which role would you like to chose to update the employee's role",
+                choices: employee.map(employee => {
+                    return `${employee.first_name} ${employee.last_name}`
+                })
                 
             
             }
@@ -208,26 +211,20 @@ function updateEmployeeRole() {
         ])
 
         .then((res) => {
-         
-            console.log("res:", res.employeeRole)
-            
-            let firstName = res.first_name;
-            let lastName = res.last_name;
-            db.findAllEmployees()
+        
+            db.findAllRoles()
                 .then(([rows]) => {
                     let roles = rows;
-                    var newRole = roles.map(({ id, role }) => ({
-                        name: role,
-                        value: id,
-                    }));
-
+                      console.table(roles);
+                    
                     inquirer
                         .prompt({
                             type: "list",
-                            name: "roleId",
+                            name: "employee",
                             message: "which employee's role do you wanna update",
-                            // choices: ["employeeRole", "employeeRole"]
-
+                            choices: roles.map(role => {
+                                return `${role.title}`
+                            })
                         })
                         .then((res) => {
                             let roleId = res.roleId;

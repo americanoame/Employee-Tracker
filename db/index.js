@@ -57,7 +57,7 @@ class DB {
         `, employee );
     }
 
-    updateEmployeeRole() {
+    updateEmployee() {
         return this.connection.promise().query(`
         SELECT e.id, e.first_name, e.last_name, r.title, d.tr_name AS department, r.salary, CONCAT(m.first_name, ' ' , m.last_name) AS manager 
         FROM employee e 
