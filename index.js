@@ -188,8 +188,6 @@ function addNewEmployee() {           // you need to do find all roles function 
 
 }
 
-
-
 function updateEmployeeRole() {
     inquirer
         .prompt([
@@ -197,13 +195,13 @@ function updateEmployeeRole() {
                 type: "list",
                 name: "emplayeeName",
                 message: " Which type of employee's role would you like to update",
-                choices: newArray
+                
             },
             {
                 type: "list",
                 name: "employeeRole",
                 message: "Which role would you like to chose to update the employee's role",
-                choices: newRole
+            
             }
 
         ])
@@ -214,8 +212,8 @@ function updateEmployeeRole() {
             db.findAllEmployees()
                 .then(([rows]) => {
                     let roles = rows;
-                    var rolesArr = roles.map(({ id, title }) => ({
-                        name: title,
+                    var newRole = roles.map(({ id, role }) => ({
+                        name: role,
                         value: id,
                     }));
 
@@ -225,6 +223,7 @@ function updateEmployeeRole() {
                             name: "roleId",
                             message: "which employee's role do you wanna update",
                             choices: newRole,
+
                         })
                         .then((res) => {
                             let roleId = res.roleId;
