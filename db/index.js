@@ -57,6 +57,15 @@ class DB {
         `, employee );
     }
 
+    updateEmployeeRole() {
+        return this.connection.promise().query(`
+        SELECT e.id, e.first_name, e.last_name, r.title, d.tr_name AS department, r.salary, CONCAT(m.first_name, ' ' , m.last_name) AS manager 
+        FROM employee e 
+        LEFT JOIN role r ON r.id = e.role_id 
+        `);
+    }
+
+
 };
 
 // new instance of our DB class, passing the database connection as a parameter
