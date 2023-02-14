@@ -6,7 +6,7 @@
  #### roles, and employees. the project is not done yet however in the near future
  #### it will have all its functionality.
  
- ![Screenshot 2023-01-30 at 5 44 52 PM](https://user-images.githubusercontent.com/77306236/215613601-506acfe2-f3b2-43a2-9a96-2539c7719640.png)
+ ![Screenshot 2023-02-14 at 12 08 12 AM](https://user-images.githubusercontent.com/77306236/218644942-d29869cf-b9e9-4447-a33c-677b024861cf.png)
 
   ## Table of Contents
 * [Installation](#Installation)
@@ -22,7 +22,7 @@
 ###### MYSQL, NODE.JS, JAVASCRIPT
 
 ## Usage
-#### Check the Walkthrough Video:  https://watch.screencastify.com/v/nafyWuYWpvc4vwMgffo7
+#### Check the Walkthrough Video:  https://watch.screencastify.com/v/uAQNuPXIlrL64JW6xhWc
 
 ## ⚖️ License
 #### N/A

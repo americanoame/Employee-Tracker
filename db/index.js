@@ -63,10 +63,10 @@ class DB {
         return this.connection.promise().query(sql, parameter);
     }
 
-    updateEmployee(role) {
+    updateEmployee(role, res) {
         return this.connection.promise().query(`
-            INSERT INTO role SET ?;
-         `, role );
+            UPDATE employee SET role_id = ${role} WHERE employee.id = ${res}
+         `);
     }
 };
 
