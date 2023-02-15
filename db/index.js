@@ -63,9 +63,9 @@ class DB {
         return this.connection.promise().query(sql, parameter);
     }
 
-    updateEmployee(role, res) {
+    updateEmployee(roleId, employeeId) {
         return this.connection.promise().query(`
-            UPDATE employee SET role_id = ${role} WHERE employee.id = ${res}
+            UPDATE employee SET role_id = ${roleId} WHERE employee.id = ${employeeId}
          `);
     }
 };

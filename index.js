@@ -179,8 +179,26 @@ async function addNewEmployee() {           // you need to do find all roles fun
                 choices: rolesArr,
             },
         ])
+
+    const [rows2] = await db.findAllEmployees()
+    let employees = rows2;
+    var employeesArr = employees.map(({ id, first_name, last_name }) => ({
+        name: first_name + " " + last_name,
+        value: id,
+    }));
+
+    const { manager_id } = await inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "manager_id",
+                message: "who is the manager of this employee",
+                choices: employeesArr,
+            },
+        ])
+
     console.log(roleId)
-    const manager_id = 2;  //TO DO GET ALL MANAGERS AND ORGANIZE LIKE ROLES ABOVE TO ASK QUESTION. FOR NOW WE DEFAULT ALL MANAGERS TO ID 2
+    // const manager_id = 2;  //TO DO GET ALL MANAGERS AND ORGANIZE LIKE ROLES ABOVE TO ASK QUESTION. FOR NOW WE DEFAULT ALL MANAGERS TO ID 2
     const success = await db.createEmployee(firstName, lastName, roleId, manager_id);
     mainMenu();
 
@@ -197,8 +215,11 @@ async function updateEmployee() {
         .then((employee) => {
 
             var employeeList = employee[0].map(employee => {
-                console.log(employee);
-                return `${employee.first_name} ${employee.last_name}`
+                // console.log(employee);
+                return {
+                    name: `${employee.first_name} ${employee.last_name}`,
+                    value: employee.id
+                }
             })
 
             console.log(employeeList);
@@ -208,10 +229,9 @@ async function updateEmployee() {
 
                     {
                         type: "list",
-                        name: "employee",
+                        name: "employeeId",
                         message: "which employee would you like to update",
                         choices: employeeList,
-
                     }
 
                 ])
@@ -222,22 +242,28 @@ async function updateEmployee() {
                     db.findAllRoles()
                         .then(([rows]) => {
                             let roles = rows;
-                            console.table(roles);
+                            // console.table(roles);
 
                             inquirer
                                 .prompt({
                                     type: "list",
-                                    name: "employee",
+                                    name: "roleId",
                                     message: "which employee's role do you wanna update",
                                     choices: roles.map(role => {
-                                        return `${role.title}`
+                                        return {
+                                            name: `${role.title}`,
+                                            value: role.id
+                                        }
                                     })
                                 })
                                 .then((res) => {
 
-
                                     console.log(chosenEmployee, res);
-                                    db.updateEmployee(chosenEmployee, res);
+                                    const employeeId = chosenEmployee.employeeId
+                                    const roleId = res.roleId
+
+                                    db.updateEmployee(roleId, employeeId);
+                                    mainMenu()
                                 });
                         });
                 });
