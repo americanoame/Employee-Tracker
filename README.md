@@ -22,7 +22,7 @@
 ###### MYSQL, NODE.JS, JAVASCRIPT
 
 ## Usage
-#### Check the Walkthrough Video:  https://watch.screencastify.com/v/uAQNuPXIlrL64JW6xhWc
+#### Check the Walkthrough Video:  https://watch.screencastify.com/v/H6sL70AyNlZYF8CMR5cq
 
 ## ⚖️ License
 #### N/A
